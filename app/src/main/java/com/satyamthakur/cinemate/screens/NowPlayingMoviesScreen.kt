@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -79,7 +82,7 @@ fun MovieItem(movieResult: Result) {
         modifier = Modifier.width(300.dp)
     ) {
         ImageCard(
-            painter = "https://image.tmdb.org/t/p/w500${movieResult.backdrop_path}",
+            painter = "https://image.tmdb.org/t/p/original${movieResult.backdrop_path}",
             title = movieResult.title,
             movieResult = movieResult
         )
@@ -114,7 +117,7 @@ fun ImageCard(
                         Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                Color.Black
+                                Color(0xFF292929)
                             ),
                             startY = 300f
                         )
@@ -130,24 +133,33 @@ fun ImageCard(
                     Text(
                         text = title,
                         fontFamily = poppinsFont,
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.SemiBold,
                         color = Color.White,
-                        fontSize = 20.sp
+                        fontSize = 20.sp,
+                        style = TextStyle(
+                            platformStyle = PlatformTextStyle(
+                                includeFontPadding = false
+                            )
+                        )
                     )
 
                     var genres = GenreMapper.mapIdsToGenreNames(movieResult.genre_ids)
+
                     Row {
                         for (i in 0..minOf(2, genres.size - 1)) {
                             Text(
-                                genres.get(i) + if (i == 2 || i == genres.lastIndex) "" else ",",
-                                modifier = Modifier.padding(2.dp),
+                                text = genres.get(i) + if (i == 2 || i == genres.lastIndex) "" else ", ",
                                 color = Color.White,
                                 fontFamily = poppinsFont,
-                                fontSize = 12.sp
+                                fontSize = 16.sp,
+                                style = TextStyle(
+                                    platformStyle = PlatformTextStyle(
+                                        includeFontPadding = false
+                                    )
+                                )
                             )
                         }
                     }
-
                 }
             }
         }
@@ -195,7 +207,7 @@ fun NormalMovieCard(poster_path: String) {
     ) {
 
         AsyncImage(
-            model = "https://image.tmdb.org/t/p/w500${poster_path}",
+            model = "https://image.tmdb.org/t/p/original${poster_path}",
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
