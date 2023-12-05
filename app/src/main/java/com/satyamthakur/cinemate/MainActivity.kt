@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.satyamthakur.cinemate.screens.NowPlayingMoviesScreen
 import com.satyamthakur.cinemate.ui.theme.CinemateTheme
 import com.satyamthakur.cinemate.ui.theme.poppinsFont
+import com.satyamthakur.cinemate.utils.NetworkChecker
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,6 +36,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
+
+
                     Column {
                         Text(
                             text = "CINEMATE",
@@ -58,7 +62,6 @@ class MainActivity : ComponentActivity() {
                         NowPlayingMoviesScreen()
                     }
                 }
-
             }
         }
     }

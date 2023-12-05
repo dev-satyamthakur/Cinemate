@@ -1,7 +1,5 @@
 package com.satyamthakur.cinemate.screens
 
-import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,12 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,13 +27,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,12 +42,14 @@ import com.satyamthakur.cinemate.R
 import com.satyamthakur.cinemate.models.Result
 import com.satyamthakur.cinemate.ui.theme.poppinsFont
 import com.satyamthakur.cinemate.utils.GenreMapper
+import com.satyamthakur.cinemate.utils.NetworkChecker
 import com.satyamthakur.cinemate.viewmodels.MoviesViewModel
 
 @Composable
 fun NowPlayingMoviesScreen() {
     val moviesViewModel: MoviesViewModel = hiltViewModel()
     val movies: State<List<Result>> = moviesViewModel.movies.collectAsState()
+
 
     if (movies.value.isEmpty()) {
         Box(
@@ -65,20 +63,26 @@ fun NowPlayingMoviesScreen() {
             )
         }
     } else {
+        val listState = rememberLazyListState()
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(vertical = 16.dp),
             contentPadding = PaddingValues( // Adding padding to first and last card
                 start = 16.dp,
                 end = 16.dp
-            )
+            ),
+            state = listState
         ) {
             // ...
-            this.items(movies.value) {
-                MovieItem(movieResult = it)
+            this.items(movies.value.count()) { index ->
+                MovieItem(movieResult = movies.value[index])
+                if (index == movies.value.count() - 1) {
+                    moviesViewModel.getMoreMovies()
+                }
             }
         }
     }
+
 }
 
 @Composable

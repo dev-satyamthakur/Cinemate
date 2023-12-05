@@ -11,12 +11,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(private val repository: MoviesRepository): ViewModel() {
+
+    private var currPage = 1
+
     val movies: StateFlow<List<Result>>
         get() = repository.movies
 
     init {
         viewModelScope.launch {
-            repository.getMovies()
+            repository.getMovies(currPage++)
+        }
+    }
+
+    fun getMoreMovies() {
+        viewModelScope.launch {
+            repository.getMovies(currPage++)
         }
     }
 }
