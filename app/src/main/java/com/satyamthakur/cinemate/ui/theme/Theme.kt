@@ -47,6 +47,7 @@ fun CinemateTheme(
     content: @Composable () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
+
     SideEffect {
         systemUiController.setStatusBarColor(
             color = Color.White,

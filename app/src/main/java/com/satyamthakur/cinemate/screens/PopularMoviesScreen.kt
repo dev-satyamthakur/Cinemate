@@ -2,6 +2,7 @@ package com.satyamthakur.cinemate.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +51,7 @@ import com.satyamthakur.cinemate.viewmodels.MoviesViewModel
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun PopularMoviesScreen() {
+fun PopularMoviesScreen(navigateToMovieDetails: (movieId: String) -> Unit) {
 
     val moviesViewModel: MoviesViewModel = hiltViewModel()
     val movies: State<List<Result>> = moviesViewModel.movies.collectAsState()
@@ -81,7 +82,7 @@ fun PopularMoviesScreen() {
         ) {
             // ...
             this.items(movies.value.count()) { index ->
-                MovieItem(movieResult = movies.value[index])
+                MovieItem(movieResult = movies.value[index], navigateToMovieDetails)
                 if (index == movies.value.count() - 1) {
                     moviesViewModel.getMoreMovies()
                 }
@@ -92,14 +93,17 @@ fun PopularMoviesScreen() {
 }
 
 @Composable
-fun MovieItem(movieResult: Result) {
+fun MovieItem(movieResult: Result, navigateToMovieDetails: (movieId: String) -> Unit) {
     Column(
         modifier = Modifier.width(300.dp)
     ) {
         ImageCard(
             painter = "https://image.tmdb.org/t/p/original${movieResult.backdrop_path}",
             title = movieResult.title,
-            movieResult = movieResult
+            movieResult = movieResult,
+            modifier = Modifier.clickable {
+                navigateToMovieDetails(movieResult.id.toString())
+            }
         )
     }
 }
