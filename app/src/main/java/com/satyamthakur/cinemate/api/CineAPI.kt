@@ -1,6 +1,7 @@
 package com.satyamthakur.cinemate.api
 
 import com.satyamthakur.cinemate.BuildConfig
+import com.satyamthakur.cinemate.models.MovieDetailsResponse
 import com.satyamthakur.cinemate.models.PopularMoviesResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -19,4 +20,9 @@ interface CineAPI {
         @Query("page") page: Int
         ): Response<PopularMoviesResponse>
 
+    @GET("movie/{movieId}")
+    suspend fun getMovieDetails(
+        @Header("Authorization") token: String = "Bearer ${BuildConfig.TMDB_TOKEN}",
+        @Path("movieId") movieId: Int
+    ): Response<MovieDetailsResponse>
 }

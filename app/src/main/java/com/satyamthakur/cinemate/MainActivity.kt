@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.satyamthakur.cinemate.screens.MovieDetailsScreen
 import com.satyamthakur.cinemate.screens.PopularMoviesScreen
 import com.satyamthakur.cinemate.screens.TrendingCategories
 import com.satyamthakur.cinemate.ui.theme.CinemateTheme
@@ -71,19 +72,18 @@ fun App() {
                 type = NavType.StringType
             }
         )) {
-            val movieId = it.arguments!!.getString("movieId")
-            MovieDetails(movieId)
+            MovieDetails()
         }
     }
 }
 
 @Composable
-fun MovieDetails(movieId: String?) {
+fun MovieDetails() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text("Movie Details Id " + movieId!!)
+        MovieDetailsScreen()
     }
 }
 
