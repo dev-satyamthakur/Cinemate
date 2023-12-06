@@ -1,5 +1,6 @@
 package com.satyamthakur.cinemate.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,8 +22,11 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -33,7 +37,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,16 +48,19 @@ import com.satyamthakur.cinemate.utils.GenreMapper
 import com.satyamthakur.cinemate.utils.NetworkChecker
 import com.satyamthakur.cinemate.viewmodels.MoviesViewModel
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
-fun NowPlayingMoviesScreen() {
+fun PopularMoviesScreen() {
+
     val moviesViewModel: MoviesViewModel = hiltViewModel()
     val movies: State<List<Result>> = moviesViewModel.movies.collectAsState()
+
 
 
     if (movies.value.isEmpty()) {
         Box(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxWidth().height(180.dp),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator(
@@ -111,7 +117,7 @@ fun ImageCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Box(
-            modifier = Modifier.height(200.dp)
+            modifier = Modifier.height(180.dp)
         ) {
             AsyncImage(
                 model = painter,
@@ -144,7 +150,7 @@ fun ImageCard(
                         fontFamily = poppinsFont,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White,
-                        fontSize = 20.sp,
+                        fontSize = 16.sp,
                         style = TextStyle(
                             platformStyle = PlatformTextStyle(
                                 includeFontPadding = false
@@ -160,7 +166,7 @@ fun ImageCard(
                                 text = genres.get(i) + if (i == 2 || i == genres.lastIndex) "" else ", ",
                                 color = Color.White,
                                 fontFamily = poppinsFont,
-                                fontSize = 16.sp,
+                                fontSize = 12.sp,
                                 style = TextStyle(
                                     platformStyle = PlatformTextStyle(
                                         includeFontPadding = false

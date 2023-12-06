@@ -19,7 +19,7 @@ class MoviesRepository @Inject constructor(private val cineAPI: CineAPI) {
 
     suspend fun getMovies(currPage: Int) {
 
-        val response = cineAPI.getPopularMovies(what = "now_playing", page = currPage)
+        val response = cineAPI.getPopularMovies(what = "popular", page = currPage)
         if (response.isSuccessful && response.body() != null) {
 
             var newlist = mutableListOf<Result>()
