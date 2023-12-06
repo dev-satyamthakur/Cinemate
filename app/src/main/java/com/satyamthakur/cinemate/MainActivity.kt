@@ -79,12 +79,7 @@ fun App() {
 
 @Composable
 fun MovieDetails() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        MovieDetailsScreen()
-    }
+    MovieDetailsScreen()
 }
 
 @Composable
@@ -117,7 +112,7 @@ fun HomeScreen(navigateToMovieDetails: (movieId: String) -> Unit) {
 }
 
 @Composable
-fun PopularNowSection (navigateToMovieDetails: (movieId: String) -> Unit) {
+fun PopularNowSection(navigateToMovieDetails: (movieId: String) -> Unit) {
     Text(
         text = "Popular Now",
         fontFamily = poppinsFont,
@@ -132,7 +127,7 @@ fun PopularNowSection (navigateToMovieDetails: (movieId: String) -> Unit) {
 }
 
 @Composable
-fun TrendingCategorySection () {
+fun TrendingCategorySection() {
     Text(
         text = "Trending Category",
         fontFamily = poppinsFont,

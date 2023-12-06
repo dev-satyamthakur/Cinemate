@@ -186,35 +186,6 @@ fun ImageCard(
 }
 
 @Composable
-fun RatingStars(votes: Double) {
-    var voteAverage = votes
-    voteAverage = voteAverage / 2
-    var fullCount = voteAverage.toInt()
-    voteAverage = voteAverage - fullCount.toDouble()
-
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
-    ) {
-        repeat(fullCount) {
-            Icon(
-                painter = painterResource(R.drawable.ic_star),
-                contentDescription = null,
-                tint = Color(0xffe8b923),
-                modifier = Modifier.size(18.dp)
-            )
-        }
-        if (voteAverage >= 0.5) {
-            Icon(
-                painter = painterResource(R.drawable.ic__star_half),
-                contentDescription = null,
-                tint = Color(0xffe8b923),
-                modifier = Modifier.size(18.dp)
-            )
-        }
-    }
-}
-
-@Composable
 fun NormalMovieCard(poster_path: String) {
     Card(
         modifier = Modifier.fillMaxWidth().height(300.dp),
