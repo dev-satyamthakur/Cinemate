@@ -1,6 +1,6 @@
 package com.satyamthakur.cinemate.models
 
-data class PopularMoviesResponse(
+data class MoviesResponse(
     val page: Int,
     val results: List<Result>,
     val totalPages: Int,

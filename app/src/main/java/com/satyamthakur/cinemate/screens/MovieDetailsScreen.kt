@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -55,9 +54,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.satyamthakur.cinemate.R
-import com.satyamthakur.cinemate.models.MovieCastResponse
 import com.satyamthakur.cinemate.models.MovieDetailsResponse
-import com.satyamthakur.cinemate.models.Result
 import com.satyamthakur.cinemate.ui.theme.bodyTextSB
 import com.satyamthakur.cinemate.ui.theme.labelTextMedium
 import com.satyamthakur.cinemate.ui.theme.poppinsFont
@@ -65,9 +62,7 @@ import com.satyamthakur.cinemate.ui.theme.primaryGrayForLabels
 import com.satyamthakur.cinemate.utils.LanguageMapper
 import com.satyamthakur.cinemate.utils.TimeConvertorUtility
 import com.satyamthakur.cinemate.utils.data.exampleMovieDetails
-import com.satyamthakur.cinemate.viewmodels.MovieCastViewModel
 import com.satyamthakur.cinemate.viewmodels.MovieDetailsViewModel
-import com.satyamthakur.cinemate.viewmodels.MoviesViewModel
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)

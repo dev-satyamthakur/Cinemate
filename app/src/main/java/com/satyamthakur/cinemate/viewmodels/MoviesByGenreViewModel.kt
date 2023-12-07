@@ -1,5 +1,6 @@
 package com.satyamthakur.cinemate.viewmodels
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satyamthakur.cinemate.models.Result
@@ -10,22 +11,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoviesViewModel @Inject constructor(private val repository: MoviesRepository): ViewModel() {
-
-    private var currPage = 1
+class MoviesByGenreViewModel @Inject constructor(
+    private val repository: MoviesRepository,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     val movies: StateFlow<List<Result>>
-        get() = repository.movies
+        get() = repository.moviesByGenre
 
     init {
         viewModelScope.launch {
-            repository.getMovies(currPage++)
+            val genreId = savedStateHandle.get<String>("genreId") ?: "28"
+            repository.getMoviesByGenre(genreId)
         }
     }
 
-    fun getMoreMovies() {
-        viewModelScope.launch {
-            repository.getMovies(currPage++)
-        }
-    }
 }

@@ -3,11 +3,10 @@ package com.satyamthakur.cinemate.api
 import com.satyamthakur.cinemate.BuildConfig
 import com.satyamthakur.cinemate.models.MovieCastResponse
 import com.satyamthakur.cinemate.models.MovieDetailsResponse
-import com.satyamthakur.cinemate.models.PopularMoviesResponse
+import com.satyamthakur.cinemate.models.MoviesResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -19,7 +18,7 @@ interface CineAPI {
         @Path("what") what: String,
         @Query("region") region: String = "",
         @Query("page") page: Int
-        ): Response<PopularMoviesResponse>
+    ): Response<MoviesResponse>
 
     @GET("movie/{movieId}")
     suspend fun getMovieDetails(
@@ -32,4 +31,11 @@ interface CineAPI {
         @Header("Authorization") token: String = "Bearer ${BuildConfig.TMDB_TOKEN}",
         @Path("movieId") movieId: Int
     ): Response<MovieCastResponse>
+
+    @GET("discover/movie")
+    suspend fun getMoviesByGenre(
+        @Header("Authorization") token: String = "Bearer ${BuildConfig.TMDB_TOKEN}",
+        @Query("with_genres") genre: String
+    ): Response<MoviesResponse>
+
 }

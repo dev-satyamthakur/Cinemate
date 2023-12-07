@@ -33,6 +33,7 @@ import androidx.navigation.navArgument
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.satyamthakur.cinemate.screens.MovieDetailsScreen
+import com.satyamthakur.cinemate.screens.MoviesByGenreScreen
 import com.satyamthakur.cinemate.screens.PopularMoviesScreen
 import com.satyamthakur.cinemate.screens.TrendingCategories
 import com.satyamthakur.cinemate.ui.theme.CinemateTheme
@@ -64,9 +65,10 @@ fun App() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "home") {
         composable(route = "home") {
-            HomeScreen {
-                navController.navigate("movie_details/${it}")
-            }
+            HomeScreen(
+                navigateToMovieDetails = { navController.navigate("movie_details/${it}") },
+                navigateToGenreMovies = { navController.navigate("genre_movies/${it}") }
+            )
         }
         composable(route = "movie_details/{movieId}", arguments = listOf(
             navArgument("movieId") {
@@ -75,8 +77,21 @@ fun App() {
         )) {
             MovieDetails(navController) // passing navController for back navigation
         }
+        composable(route = "genre_movies/{genreId}", arguments = listOf(
+            navArgument("genreId") {
+                type = NavType.StringType
+            }
+        )) {
+            MoviesByGenre(navController)
+        }
     }
 }
+
+@Composable
+fun MoviesByGenre(navController: NavController) {
+    MoviesByGenreScreen(navController)
+}
+
 
 @Composable
 fun MovieDetails(navController: NavController) {
@@ -84,7 +99,10 @@ fun MovieDetails(navController: NavController) {
 }
 
 @Composable
-fun HomeScreen(navigateToMovieDetails: (movieId: String) -> Unit) {
+fun HomeScreen(
+    navigateToMovieDetails: (movieId: String) -> Unit,
+    navigateToGenreMovies: (genreId: String) -> Unit
+) {
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
@@ -107,7 +125,7 @@ fun HomeScreen(navigateToMovieDetails: (movieId: String) -> Unit) {
             }
         } else {
             PopularNowSection(navigateToMovieDetails)
-            TrendingCategorySection()
+            TrendingCategorySection(navigateToGenreMovies)
         }
     }
 }
@@ -128,7 +146,7 @@ fun PopularNowSection(navigateToMovieDetails: (movieId: String) -> Unit) {
 }
 
 @Composable
-fun TrendingCategorySection() {
+fun TrendingCategorySection(navigateToGenreMovies: (genreId: String) -> Unit) {
     Text(
         text = "Trending Category",
         fontFamily = poppinsFont,
@@ -138,6 +156,6 @@ fun TrendingCategorySection() {
         textAlign = TextAlign.Start,
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     )
-    TrendingCategories()
+    TrendingCategories(navigateToGenreMovies)
 }
 

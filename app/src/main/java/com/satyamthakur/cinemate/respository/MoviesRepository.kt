@@ -26,6 +26,10 @@ class MoviesRepository @Inject constructor(private val cineAPI: CineAPI) {
     val movieCast: StateFlow<List<MovieCastResponse.Cast>>
         get() = _movieCast
 
+    private val _moviesByGenre = MutableStateFlow<List<Result>>(emptyList())
+    val moviesByGenre: StateFlow<List<Result>>
+        get() = _moviesByGenre
+
     suspend fun getMovies(currPage: Int) {
 
         val response = cineAPI.getPopularMovies(what = "popular", page = currPage)
@@ -52,6 +56,13 @@ class MoviesRepository @Inject constructor(private val cineAPI: CineAPI) {
         val response = cineAPI.getCast(movieId = movieId)
         if (response.isSuccessful && response.body() != null) {
             _movieCast.emit(response.body()!!.cast)
+        }
+    }
+
+    suspend fun getMoviesByGenre(genreId: String) {
+        val response = cineAPI.getMoviesByGenre(genre = genreId)
+        if (response.isSuccessful && response.body() != null) {
+            _moviesByGenre.emit(response.body()!!.results)
         }
     }
 }
