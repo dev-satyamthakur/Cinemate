@@ -38,9 +38,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,7 +50,11 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.satyamthakur.cinemate.R
 import com.satyamthakur.cinemate.models.MovieDetailsResponse
+import com.satyamthakur.cinemate.ui.theme.bodyTextSB
+import com.satyamthakur.cinemate.ui.theme.labelTextMedium
 import com.satyamthakur.cinemate.ui.theme.poppinsFont
+import com.satyamthakur.cinemate.utils.TimeConvertorUtility
+import com.satyamthakur.cinemate.utils.data.exampleMovieDetails
 import com.satyamthakur.cinemate.viewmodels.MovieDetailsViewModel
 import kotlin.math.roundToInt
 
@@ -79,7 +85,7 @@ fun MovieDetailsScreen(navController: NavController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MovieDetailTopAppBar(movie: MovieDetailsResponse, navController: NavController) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -127,6 +133,65 @@ fun MovieDetailTopAppBar(movie: MovieDetailsResponse, navController: NavControll
     }
 }
 
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+fun Prev() {
+    MovieDetail(exampleMovieDetails, innerPadding = PaddingValues(16.dp))
+}
+
+
+@Composable
+fun MovieBasicDetails(movie: MovieDetailsResponse) {
+    Row(
+        modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp).fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier.width(100.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                "Length",
+                style = labelTextMedium
+            )
+            Text(
+                TimeConvertorUtility.convertMinutesToTimeString(movie.runtime),
+                style = bodyTextSB,
+            )
+        }
+
+        Column(
+            modifier = Modifier.width(100.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                "Language",
+                style = labelTextMedium
+            )
+            Text(
+                movie.spokenLanguages[0].name,
+                style = bodyTextSB,
+            )
+
+        }
+
+        Column(
+            modifier = Modifier.width(100.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                "Year",
+                style = labelTextMedium
+            )
+            Text(
+                movie.releaseDate.split("-")[0],
+                style = bodyTextSB,
+            )
+        }
+    }
+}
+
 @Composable
 fun MovieDetail(movie: MovieDetailsResponse, innerPadding: PaddingValues) {
     Column(
@@ -142,6 +207,7 @@ fun MovieDetail(movie: MovieDetailsResponse, innerPadding: PaddingValues) {
         ) {
             AsyncImage(
                 model = "https://image.tmdb.org/t/p/original${movie.posterPath}",
+                placeholder = painterResource(R.drawable.blade_runner_poster),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -168,6 +234,8 @@ fun MovieDetail(movie: MovieDetailsResponse, innerPadding: PaddingValues) {
         )
 
         RatingStars(movie.voteAverage)
+
+        MovieBasicDetails(movie = movie)
     }
 
 }

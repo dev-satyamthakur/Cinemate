@@ -1,6 +1,7 @@
 package com.satyamthakur.cinemate.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -13,6 +14,22 @@ val poppinsFont = FontFamily(
     Font(R.font.poppins_500_medium, FontWeight.Medium),
     Font(R.font.poppins_600_semibold, FontWeight.SemiBold),
     Font(R.font.poppins_700_bold, FontWeight.Bold),
+)
+
+val labelTextMedium = TextStyle(
+    fontFamily = poppinsFont,
+    fontWeight = FontWeight.Medium,
+    fontSize = 16.sp,
+    letterSpacing = 0.15.sp,
+    color = primaryGrayForLabels
+)
+
+val bodyTextSB = TextStyle(
+    fontFamily = poppinsFont,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 18.sp,
+    letterSpacing = 0.15.sp,
+    color = Color.Black
 )
 
 // Set of Material typography styles to start with
