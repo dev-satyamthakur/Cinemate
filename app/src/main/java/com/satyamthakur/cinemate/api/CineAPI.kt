@@ -1,6 +1,7 @@
 package com.satyamthakur.cinemate.api
 
 import com.satyamthakur.cinemate.BuildConfig
+import com.satyamthakur.cinemate.models.MovieCastResponse
 import com.satyamthakur.cinemate.models.MovieDetailsResponse
 import com.satyamthakur.cinemate.models.PopularMoviesResponse
 import retrofit2.Response
@@ -25,4 +26,10 @@ interface CineAPI {
         @Header("Authorization") token: String = "Bearer ${BuildConfig.TMDB_TOKEN}",
         @Path("movieId") movieId: Int
     ): Response<MovieDetailsResponse>
+
+    @GET("movie/{movieId}/credits")
+    suspend fun getCast(
+        @Header("Authorization") token: String = "Bearer ${BuildConfig.TMDB_TOKEN}",
+        @Path("movieId") movieId: Int
+    ): Response<MovieCastResponse>
 }

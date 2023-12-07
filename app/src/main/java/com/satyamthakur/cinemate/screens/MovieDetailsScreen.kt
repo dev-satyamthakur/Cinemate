@@ -12,11 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,13 +32,13 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,13 +49,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.satyamthakur.cinemate.R
+import com.satyamthakur.cinemate.models.MovieCastResponse
 import com.satyamthakur.cinemate.models.MovieDetailsResponse
+import com.satyamthakur.cinemate.models.Result
 import com.satyamthakur.cinemate.ui.theme.bodyTextSB
 import com.satyamthakur.cinemate.ui.theme.labelTextMedium
 import com.satyamthakur.cinemate.ui.theme.poppinsFont
+import com.satyamthakur.cinemate.ui.theme.primaryGrayForLabels
+import com.satyamthakur.cinemate.utils.LanguageMapper
 import com.satyamthakur.cinemate.utils.TimeConvertorUtility
 import com.satyamthakur.cinemate.utils.data.exampleMovieDetails
+import com.satyamthakur.cinemate.viewmodels.MovieCastViewModel
 import com.satyamthakur.cinemate.viewmodels.MovieDetailsViewModel
+import com.satyamthakur.cinemate.viewmodels.MoviesViewModel
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -139,11 +145,93 @@ fun Prev() {
     MovieDetail(exampleMovieDetails, innerPadding = PaddingValues(16.dp))
 }
 
+@Composable
+fun MovieDetail(movie: MovieDetailsResponse, innerPadding: PaddingValues) {
+    Column(
+        modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
+            .padding(innerPadding),
+    ) {
+        Card(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .height(300.dp)
+                .width(220.dp)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            AsyncImage(
+                model = "https://image.tmdb.org/t/p/original${movie.posterPath}",
+                placeholder = painterResource(R.drawable.placeholder_loading),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        Text(
+            text = movie.title,
+            fontFamily = poppinsFont,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+            lineHeight = 24.sp,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(top = 16.dp, start = 32.dp, end = 32.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+
+        Text(
+            text = ((movie.voteAverage * 100.0).roundToInt() / 100.0).toString(),
+            fontFamily = poppinsFont,
+            fontWeight = FontWeight.Bold,
+            fontSize = 28.sp,
+            color = Color(0xFF717171),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(start = 32.dp, end = 32.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+
+        RatingStars(movie.voteAverage)
+
+        MovieBasicDetails(movie = movie)
+
+        MovieOverview(movie.overview)
+
+        MoviesCastDetails()
+    }
+}
+
+@Composable
+fun MovieOverview(movieOverview: String) {
+    Column(
+        modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp)
+    ) {
+        Text(
+            text = "Storyline",
+            fontFamily = poppinsFont,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = Color.Black
+        )
+
+        Text(
+            text = movieOverview,
+            fontFamily = poppinsFont,
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp,
+            color = primaryGrayForLabels,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+    }
+}
 
 @Composable
 fun MovieBasicDetails(movie: MovieDetailsResponse) {
     Row(
-        modifier = Modifier.padding(top = 24.dp, start = 16.dp, end = 16.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(top = 24.dp, start = 16.dp, end = 16.dp)
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -170,7 +258,7 @@ fun MovieBasicDetails(movie: MovieDetailsResponse) {
                 style = labelTextMedium
             )
             Text(
-                movie.spokenLanguages[0].name,
+                LanguageMapper.getEnglishName(movie.originalLanguage).toString(),
                 style = bodyTextSB,
             )
 
@@ -193,54 +281,6 @@ fun MovieBasicDetails(movie: MovieDetailsResponse) {
 }
 
 @Composable
-fun MovieDetail(movie: MovieDetailsResponse, innerPadding: PaddingValues) {
-    Column(
-        modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
-            .padding(innerPadding),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Card(
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .height(320.dp)
-                .width(250.dp)
-        ) {
-            AsyncImage(
-                model = "https://image.tmdb.org/t/p/original${movie.posterPath}",
-                placeholder = painterResource(R.drawable.blade_runner_poster),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
-
-        Text(
-            text = movie.title,
-            fontFamily = poppinsFont,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            fontSize = 24.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(top = 16.dp, start = 32.dp, end = 32.dp)
-        )
-
-        Text(
-            text = ((movie.voteAverage * 100.0).roundToInt() / 100.0).toString(),
-            fontFamily = poppinsFont,
-            fontWeight = FontWeight.Bold,
-            fontSize = 36.sp,
-            color = Color(0xFF717171),
-            modifier = Modifier.padding()
-        )
-
-        RatingStars(movie.voteAverage)
-
-        MovieBasicDetails(movie = movie)
-    }
-
-}
-
-@Composable
 fun RatingStars(votes: Double) {
     var voteAverage = votes
     voteAverage = voteAverage / 2
@@ -248,14 +288,16 @@ fun RatingStars(votes: Double) {
     voteAverage = voteAverage - fullCount.toDouble()
 
     Row(
-        horizontalArrangement = Arrangement.spacedBy(2.dp)
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(fullCount) {
             Icon(
                 painter = painterResource(R.drawable.ic_star),
                 contentDescription = null,
                 tint = Color(0xffe8b923),
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.padding(2.dp).size(18.dp)
             )
         }
         if (voteAverage >= 0.5) {
@@ -263,7 +305,7 @@ fun RatingStars(votes: Double) {
                 painter = painterResource(R.drawable.ic__star_half),
                 contentDescription = null,
                 tint = Color(0xffe8b923),
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.padding(2.dp).size(18.dp)
             )
         }
     }

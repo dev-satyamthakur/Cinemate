@@ -22,7 +22,7 @@ val exampleMovieDetails = MovieDetailsResponse(
     id = 123456,
     imdbId = "tt1234567",
     originalLanguage = "en",
-    originalTitle = "Example Movie",
+    originalTitle = "The Bad Guys: A Very Bad Holiday",
     overview = "This is an example movie overview. ".repeat(4),
     popularity = 7.8,
     posterPath = "/example_poster.jpg",
@@ -41,7 +41,7 @@ val exampleMovieDetails = MovieDetailsResponse(
     spokenLanguages = listOf(SpokenLanguage(englishName = "English", iso6391 = "en", name = "English")),
     status = "Released",
     tagline = "An example movie tagline",
-    title = "Example Movie",
+    title = "A Holiday",
     video = false,
     voteAverage = 7.5,
     voteCount = 1000

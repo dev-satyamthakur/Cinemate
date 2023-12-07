@@ -2,6 +2,7 @@ package com.satyamthakur.cinemate.respository
 
 import androidx.compose.ui.platform.LocalContext
 import com.satyamthakur.cinemate.api.CineAPI
+import com.satyamthakur.cinemate.models.MovieCastResponse
 import com.satyamthakur.cinemate.models.MovieDetailsResponse
 import com.satyamthakur.cinemate.models.Result
 import com.satyamthakur.cinemate.utils.NetworkChecker
@@ -20,6 +21,10 @@ class MoviesRepository @Inject constructor(private val cineAPI: CineAPI) {
     private val _movieDetails = MutableStateFlow<MovieDetailsResponse?>(null)
     val movieDetails: StateFlow<MovieDetailsResponse?>
         get() = _movieDetails
+
+    private val _movieCast = MutableStateFlow<List<MovieCastResponse.Cast>>(emptyList())
+    val movieCast: StateFlow<List<MovieCastResponse.Cast>>
+        get() = _movieCast
 
     suspend fun getMovies(currPage: Int) {
 
@@ -43,4 +48,10 @@ class MoviesRepository @Inject constructor(private val cineAPI: CineAPI) {
         }
     }
 
+    suspend fun getMovieCast(movieId: Int) {
+        val response = cineAPI.getCast(movieId = movieId)
+        if (response.isSuccessful && response.body() != null) {
+            _movieCast.emit(response.body()!!.cast)
+        }
+    }
 }

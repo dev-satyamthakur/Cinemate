@@ -19,7 +19,7 @@ val poppinsFont = FontFamily(
 val labelTextMedium = TextStyle(
     fontFamily = poppinsFont,
     fontWeight = FontWeight.Medium,
-    fontSize = 16.sp,
+    fontSize = 12.sp,
     letterSpacing = 0.15.sp,
     color = primaryGrayForLabels
 )
@@ -27,7 +27,7 @@ val labelTextMedium = TextStyle(
 val bodyTextSB = TextStyle(
     fontFamily = poppinsFont,
     fontWeight = FontWeight.SemiBold,
-    fontSize = 18.sp,
+    fontSize = 14.sp,
     letterSpacing = 0.15.sp,
     color = Color.Black
 )
