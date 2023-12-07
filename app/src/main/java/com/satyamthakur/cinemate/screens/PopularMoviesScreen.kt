@@ -101,9 +101,7 @@ fun MovieItem(movieResult: Result, navigateToMovieDetails: (movieId: String) -> 
             painter = "https://image.tmdb.org/t/p/original${movieResult.backdrop_path}",
             title = movieResult.title,
             movieResult = movieResult,
-            modifier = Modifier.clickable {
-                navigateToMovieDetails(movieResult.id.toString())
-            }
+            navigateToMovieDetails = navigateToMovieDetails
         )
     }
 }
@@ -113,15 +111,21 @@ fun ImageCard(
     painter: String,
     title: String,
     movieResult: Result,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToMovieDetails: (movieId: String) -> Unit
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Box(
-            modifier = Modifier.height(180.dp)
+            modifier = Modifier
+                .height(180.dp)
+                .clickable {
+                    navigateToMovieDetails(movieResult.id.toString())
+                }
         ) {
             AsyncImage(
                 model = painter,

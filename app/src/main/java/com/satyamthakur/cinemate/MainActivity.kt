@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -72,14 +73,14 @@ fun App() {
                 type = NavType.StringType
             }
         )) {
-            MovieDetails()
+            MovieDetails(navController) // passing navController for back navigation
         }
     }
 }
 
 @Composable
-fun MovieDetails() {
-    MovieDetailsScreen()
+fun MovieDetails(navController: NavController) {
+    MovieDetailsScreen(navController)
 }
 
 @Composable
