@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,10 +45,10 @@ fun MoviesCastDetails () {
         Text(
             text = "Cast",
             fontFamily = poppinsFont,
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
             color = Color.Black,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+            modifier = Modifier.padding(start = 16.dp, end = 8.dp)
         )
         if (cast.value.isEmpty()) {
             Box(
@@ -79,13 +80,13 @@ fun MoviesCastDetails () {
 @Composable
 fun CastItem (cast: MovieCastResponse.Cast) {
     Column(
-        modifier = Modifier.padding(bottom = 16.dp)
+        modifier = Modifier.padding(bottom = 16.dp).width(120.dp)
     ) {
         Card(
             modifier = Modifier
                 .padding(top = 16.dp)
-                .height(150.dp)
-                .width(150.dp)
+                .height(120.dp)
+                .width(120.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
             AsyncImage(
@@ -101,13 +102,17 @@ fun CastItem (cast: MovieCastResponse.Cast) {
             text = cast.name,
             style = bodyTextSB,
             fontSize = 12.sp,
-            modifier = Modifier.padding(top = 8.dp)
+            modifier = Modifier.padding(top = 8.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
 
         Text(
             text = cast.character,
             style = labelTextMedium,
             fontSize = 11.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }

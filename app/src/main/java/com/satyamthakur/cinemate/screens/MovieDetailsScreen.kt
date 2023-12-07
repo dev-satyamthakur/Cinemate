@@ -1,6 +1,8 @@
 package com.satyamthakur.cinemate.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +36,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -210,19 +216,44 @@ fun MovieOverview(movieOverview: String) {
         Text(
             text = "Storyline",
             fontFamily = poppinsFont,
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold,
             color = Color.Black
         )
 
-        Text(
-            text = movieOverview,
-            fontFamily = poppinsFont,
-            fontWeight = FontWeight.Medium,
-            fontSize = 14.sp,
-            color = primaryGrayForLabels,
-            modifier = Modifier.padding(top = 8.dp)
-        )
+        var isExpanded by remember { mutableStateOf(false) }
+
+        Surface(
+            shape = MaterialTheme.shapes.medium,
+            color = Color.White,
+            // animateContentSize will change the Surface size gradually
+            modifier = Modifier.animateContentSize().padding(1.dp)
+        ) {
+            Column {
+                Text(
+                    text = movieOverview,
+                    fontFamily = poppinsFont,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 12.sp,
+                    color = primaryGrayForLabels,
+                    modifier = Modifier.padding(top = 8.dp),
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 4,
+                )
+                if (!isExpanded) {
+                    Text(
+                        text = "[Read More]",
+                        fontFamily = poppinsFont,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 12.sp,
+                        color = Color.Black,
+                        textAlign = TextAlign.End,
+                        modifier = Modifier.padding(top = 2.dp).align(Alignment.End).clickable {
+                            isExpanded = !isExpanded
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -249,6 +280,11 @@ fun MovieBasicDetails(movie: MovieDetailsResponse) {
             )
         }
 
+        Divider(
+            modifier = Modifier.height(30.dp).width(1.dp),
+            color = primaryGrayForLabels
+        )
+
         Column(
             modifier = Modifier.width(100.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -263,6 +299,11 @@ fun MovieBasicDetails(movie: MovieDetailsResponse) {
             )
 
         }
+
+        Divider(
+            modifier = Modifier.height(30.dp).width(1.dp),
+            color = primaryGrayForLabels
+        )
 
         Column(
             modifier = Modifier.width(100.dp),
