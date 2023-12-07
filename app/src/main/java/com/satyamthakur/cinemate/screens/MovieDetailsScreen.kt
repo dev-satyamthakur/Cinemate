@@ -105,8 +105,8 @@ fun MovieDetailTopAppBar(movie: MovieDetailsResponse, navController: NavControll
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = Color.White,
+                    titleContentColor = Color.Black,
                 ),
                 title = {
                     Text(

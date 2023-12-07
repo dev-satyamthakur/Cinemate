@@ -70,7 +70,7 @@ fun PopularMoviesScreen(navigateToMovieDetails: (movieId: String) -> Unit) {
             )
         }
     } else {
-        val listState = rememberLazyListState()
+        val listState = rememberLazyListState(Int.MAX_VALUE / 2 - (Int.MAX_VALUE / 2) % movies.value.size)
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(vertical = 16.dp),
@@ -80,13 +80,10 @@ fun PopularMoviesScreen(navigateToMovieDetails: (movieId: String) -> Unit) {
             ),
             state = listState
         ) {
-            // ...
-            this.items(movies.value.count()) { index ->
-                MovieItem(movieResult = movies.value[index], navigateToMovieDetails)
-                if (index == movies.value.count() - 1) {
-                    moviesViewModel.getMoreMovies()
-                }
-            }
+            items(Int.MAX_VALUE, itemContent = {
+                val index = it % movies.value.size
+                MovieItem(movieResult = movies.value[index], navigateToMovieDetails)    // item composable
+            })
         }
     }
 
