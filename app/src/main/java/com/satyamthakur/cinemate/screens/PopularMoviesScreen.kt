@@ -47,8 +47,6 @@ fun PopularMoviesScreen(navigateToMovieDetails: (movieId: String) -> Unit) {
     val moviesPopularViewModel: MoviesPopularViewModel = hiltViewModel()
     val movies: State<List<Result>> = moviesPopularViewModel.movies.collectAsState()
 
-
-
     if (movies.value.isEmpty()) {
         Box(
             modifier = Modifier

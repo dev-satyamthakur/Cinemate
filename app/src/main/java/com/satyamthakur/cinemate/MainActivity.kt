@@ -34,6 +34,7 @@ import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.satyamthakur.cinemate.screens.MovieDetailsScreen
 import com.satyamthakur.cinemate.screens.MoviesByGenreScreen
+import com.satyamthakur.cinemate.screens.NewReleasedMovies
 import com.satyamthakur.cinemate.screens.PopularMoviesScreen
 import com.satyamthakur.cinemate.screens.TrendingCategories
 import com.satyamthakur.cinemate.ui.theme.CinemateTheme
@@ -82,14 +83,15 @@ fun App() {
                 type = NavType.StringType
             }
         )) {
-            MoviesByGenre(navController)
+            val genreId = it.arguments?.getString("genreId") ?: "28"
+            MoviesByGenre(navController, genreId)
         }
     }
 }
 
 @Composable
-fun MoviesByGenre(navController: NavController) {
-    MoviesByGenreScreen(navController)
+fun MoviesByGenre(navController: NavController, genreId: String) {
+    MoviesByGenreScreen(navController, genreId)
 }
 
 
@@ -126,6 +128,7 @@ fun HomeScreen(
         } else {
             PopularNowSection(navigateToMovieDetails)
             TrendingCategorySection(navigateToGenreMovies)
+            NewReleasedSection(navigateToMovieDetails)
         }
     }
 }
@@ -158,4 +161,19 @@ fun TrendingCategorySection(navigateToGenreMovies: (genreId: String) -> Unit) {
     )
     TrendingCategories(navigateToGenreMovies)
 }
+
+@Composable
+fun NewReleasedSection(navigateToMovieDetails: (movieId: String) -> Unit) {
+    Text(
+        text = "New Released",
+        fontFamily = poppinsFont,
+        fontWeight = FontWeight.SemiBold,
+        fontSize = 18.sp,
+        color = Color.Black,
+        textAlign = TextAlign.Start,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+    )
+    NewReleasedMovies(navigateToMovieDetails)
+}
+
 
