@@ -3,6 +3,9 @@ package com.satyamthakur.cinemate
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,7 +67,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(
+        navController = navController, startDestination = "home",
+    ) {
         composable(route = "home") {
             HomeScreen(
                 navigateToMovieDetails = { navController.navigate("movie_details/${it}") },
@@ -145,7 +150,11 @@ fun PopularNowSection(navigateToMovieDetails: (movieId: String) -> Unit) {
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     )
 
-    PopularMoviesScreen(navigateToMovieDetails)
+    Surface(
+        modifier = Modifier.animateContentSize()
+    ) {
+        PopularMoviesScreen(navigateToMovieDetails)
+    }
 }
 
 @Composable
@@ -173,7 +182,11 @@ fun NewReleasedSection(navigateToMovieDetails: (movieId: String) -> Unit) {
         textAlign = TextAlign.Start,
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     )
-    NewReleasedMovies(navigateToMovieDetails)
+    Surface(
+        modifier = Modifier.animateContentSize()
+    ) {
+        NewReleasedMovies(navigateToMovieDetails)
+    }
 }
 
 

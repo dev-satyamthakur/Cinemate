@@ -270,7 +270,7 @@ fun MovieBasicDetails(movie: MovieDetailsResponse) {
                 style = labelTextMedium
             )
             Text(
-                TimeConvertorUtility.convertMinutesToTimeString(movie.runtime),
+                text = TimeConvertorUtility.convertMinutesToTimeString(movie.runtime) + ":00",
                 style = bodyTextSB,
             )
         }
