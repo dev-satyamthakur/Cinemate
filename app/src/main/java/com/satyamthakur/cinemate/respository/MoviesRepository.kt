@@ -62,10 +62,15 @@ class MoviesRepository @Inject constructor(private val cineAPI: CineAPI) {
         }
     }
 
-    suspend fun getMoviesByGenre(genreId: String) {
-        val response = cineAPI.getMoviesByGenre(genre = genreId)
+    suspend fun getMoviesByGenre(genreId: String, page: Int) {
+        val response = cineAPI.getMoviesByGenre(genre = genreId, page = page)
         if (response.isSuccessful && response.body() != null) {
-            _moviesByGenre.emit(response.body()!!.results)
+            var newlist = mutableListOf<Result>()
+            newlist.addAll(_moviesByGenre.value)
+            newlist.addAll(response.body()!!.results)
+
+            var mylist: List<Result> = newlist
+            _moviesByGenre.emit(mylist)
         }
     }
 

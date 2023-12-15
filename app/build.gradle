@@ -28,6 +28,8 @@ android {
         buildConfigField "String", "TMDB_TOKEN", "\"${properties.getProperty("TMDB_TOKEN")}\""
     }
 
+
+
     buildTypes {
         release {
             minifyEnabled true

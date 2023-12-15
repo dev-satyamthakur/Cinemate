@@ -35,7 +35,8 @@ interface CineAPI {
     @GET("discover/movie")
     suspend fun getMoviesByGenre(
         @Header("Authorization") token: String = "Bearer ${BuildConfig.TMDB_TOKEN}",
-        @Query("with_genres") genre: String
+        @Query("with_genres") genre: String,
+        @Query("page") page: Int
     ): Response<MoviesResponse>
 
 }

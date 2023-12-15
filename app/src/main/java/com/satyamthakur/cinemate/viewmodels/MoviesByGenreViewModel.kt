@@ -16,13 +16,22 @@ class MoviesByGenreViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    var currPage = 1
+
     val movies: StateFlow<List<Result>>
         get() = repository.moviesByGenre
 
     init {
         viewModelScope.launch {
             val genreId = savedStateHandle.get<String>("genreId") ?: "28"
-            repository.getMoviesByGenre(genreId)
+            repository.getMoviesByGenre(genreId, currPage++)
+        }
+    }
+
+    fun getMoreMovies() {
+        viewModelScope.launch {
+            val genreId = savedStateHandle.get<String>("genreId") ?: "28"
+            repository.getMoviesByGenre(genreId, currPage++)
         }
     }
 

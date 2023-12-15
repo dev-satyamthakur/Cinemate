@@ -1,5 +1,6 @@
 package com.satyamthakur.cinemate.screens
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -74,7 +76,8 @@ fun MoviesByGenreScreen(navController: NavController, genreId: String) {
             )
         }
     } else {
-        MovieByGenreWithTopBar(navController, genreId, movies.value)
+        MovieByGenreWithTopBar(navController, genreId, movies.value,
+            myfunc = { moviesByGenreViewModel.getMoreMovies() })
     }
 }
 
@@ -83,7 +86,8 @@ fun MoviesByGenreScreen(navController: NavController, genreId: String) {
 fun MovieByGenreWithTopBar(
     navController: NavController,
     genreId: String,
-    movies: List<Result>
+    movies: List<Result>,
+    myfunc: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
@@ -134,7 +138,7 @@ fun MovieByGenreWithTopBar(
         Surface(
             color = Color.White
         ) {
-            MoviesItem(movies, innerPadding, navController)
+            MoviesItem(movies, innerPadding, navController, myfunc)
         }
     }
 }
@@ -143,7 +147,8 @@ fun MovieByGenreWithTopBar(
 fun MoviesItem(
     movies: List<Result>,
     paddingValues: PaddingValues,
-    navController: NavController
+    navController: NavController,
+    myfunc: () -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -157,6 +162,12 @@ fun MoviesItem(
     ) {
         items(movies) { item ->
             NormalMovieCardItem(item, navController)
+        }
+        item {
+            LaunchedEffect(true) {
+                Log.d("MYAPPLOG", "Reached End")
+                myfunc()
+            }
         }
     }
 }
